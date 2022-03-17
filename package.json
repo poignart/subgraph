@@ -1,0 +1,23 @@
+{
+  "name": "poignart-subgraph",
+  "version": "0.1.0",
+  "author": "dan13ram",
+  "license": "MIT",
+  "scripts": {
+    "generate": "graph codegen subgraph.yaml",
+    "build": "graph build",
+    "format": "prettier --ignore-path .gitignore --write \"{*,**/*}.{ts,tsx,js,jsx,json,yml,yaml,md}\"",
+    "prepare-mainnet": "mustache config/mainnet.json subgraph.template.yaml > subgraph.yaml",
+    "prepare-rinkeby": "mustache config/rinkeby.json subgraph.template.yaml > subgraph.yaml",
+    "deploy-mainnet": "graph deploy --debug --product hosted-service dan13ram/poignart-mainnet",
+    "deploy-rinkeby": "graph deploy --debug --product hosted-service dan13ram/poignart-rinkeby",
+    "create-local": "graph create --node http://127.0.0.1:8020 dan13ram/poignart-local",
+    "deploy-local": "graph deploy --ipfs http://localhost:5001 --node http://127.0.0.1:8020/ dan13ram/poignart-local"
+  },
+  "devDependencies": {
+    "mustache": "^4.2.0",
+    "@amxx/graphprotocol-utils": "^1.1.0-alpha.2",
+    "@graphprotocol/graph-cli": "^0.28.0",
+    "@graphprotocol/graph-ts": "^0.26.0"
+  }
+}

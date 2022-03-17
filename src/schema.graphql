@@ -1,0 +1,63 @@
+interface Event {
+  id: ID!
+  transaction: Transaction!
+  timestamp: BigInt!
+}
+
+type Transaction @entity {
+  id: ID!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  events: [Event!]! @derivedFrom(field: "transaction")
+}
+
+type Account @entity {
+  id: ID!
+  tokens: [Token!]! @derivedFrom(field: "owner")
+  transfersFrom: [Transfer!]! @derivedFrom(field: "from")
+  transfersTo: [Transfer!]! @derivedFrom(field: "to")
+}
+
+type TokenRegistry @entity {
+  id: ID!
+  name: String
+  symbol: String
+  tokens: [Token!]! @derivedFrom(field: "registry")
+}
+
+type Token @entity {
+  id: ID!
+  registry: TokenRegistry!
+  identifier: BigInt!
+  owner: Account!
+  uri: String
+  redeem: Redeem! @derivedFrom(field: "token")
+  transfers: [Transfer!]! @derivedFrom(field: "token")
+}
+
+type Transfer implements Event @entity {
+  id: ID!
+  transaction: Transaction!
+  timestamp: BigInt!
+  token: Token!
+  from: Account!
+  to: Account!
+}
+
+type Redeem implements Event @entity {
+  id: ID!
+  transaction: Transaction!
+  timestamp: BigInt!
+  signer: Account!
+  redeemer: Account!
+  price: BigInt!
+  token: Token!
+}
+
+type Withdrawal implements Event @entity {
+  id: ID!
+  transaction: Transaction!
+  timestamp: BigInt!
+  recipient: Account!
+  amount: BigInt!
+}

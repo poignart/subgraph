@@ -1,0 +1,31 @@
+specVersion: 0.0.2
+repository: https://github.com/poignart/subgraph
+schema:
+  file: ./src/schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Poignart
+    # prettier-ignore
+    network: {{network}}
+    source:
+      abi: Poignart
+      address: '{{address}}'
+      # prettier-ignore
+      startBlock: {{startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Token
+      abis:
+        - name: Poignart
+          file: ./abis/poignart.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+        - event: Redeem(indexed address,indexed address,uint256,uint256)
+          handler: handleRedeem
+        - event: Withdraw(indexed address,uint256)
+          handler: handleWithdraw
+      file: ./src/index.ts
